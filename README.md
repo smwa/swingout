@@ -1,6 +1,6 @@
 # Swingout
 
-#### Notes
+## Notes
 
 Request Community(by clicking on map and clicking link to "Add community"):
 Community
