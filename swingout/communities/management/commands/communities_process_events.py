@@ -20,13 +20,12 @@ class Command(BaseCommand):
             for event in get(since=eventCounter.lastSeen):
                 eventCounter.lastSeen = event.id
                 eventCounter.save()
-                if event.name == 'AddCommunity':
+                if event.name == 'CommunityAdded':
                     addCommunity(event)
                 # TODO Add more event handling:
                 # CommunityVerified(uuid, methods(like urls, emailAddresses, or phoneNumbers))
                 # CommunityFailedVerification(uuid, methods)
                 # CommunityUpdated(uuid, <community fields>)
-                # CommunityUpdateRequested(uuid, message)
             sleep(SECONDS_BETWEEN_QUERIES)
     
 def addCommunity(event):

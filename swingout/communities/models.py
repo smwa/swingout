@@ -9,6 +9,9 @@ class Community(models.Model):
 
     class Meta:
         verbose_name_plural = "Communities"
+        indexes = [
+            models.Index(fields=['uuid',]),
+        ]
 
     def __str__(self):
         return self.label

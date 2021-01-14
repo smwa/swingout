@@ -12,8 +12,6 @@ from events.service import create as createEvent
 
 from .models import Community, Style, Contact
 
-# TODO Handle update requests, maybe in different django app
-
 @csrf_exempt
 def index(request):
     if request.method == 'GET':
@@ -52,7 +50,8 @@ def post(request):
             return __fieldErrorResponse('contacts', 'Contacts can only contain one piece of information')
         if 'emailAddress' not in contact and 'phoneNumber' not in contact and 'url' not in contact:
             return __fieldErrorResponse('contacts', 'Contacts must have an email address, a phone number, or a url')
-    createEvent('AddCommunity', data)
+    createEvent('CommunityAdded', data)
+    return JsonResponse({})
 
 def get(request):
     communities = []
@@ -63,6 +62,17 @@ def get(request):
     for community in communityObjects:
         communities.append(__communityToDict(community))
     return JsonResponse({"communities": communities})
+
+def requestUpdate(request):
+    uuid = request.POST.get('uuid')
+    message = str(request.POST.get('message'))
+    if message == '':
+        return __fieldErrorResponse('message', 'Message is required')
+    if len(message) > 512:
+        return __fieldErrorResponse('message', 'Message must be shorter than 512 characters')
+    community = Community.objects.filter(uuid=uuid)[0]
+    createEvent('CommunityUpdateRequested', {'uuid': community.uuid, 'message': message})
+    return JsonResponse({})
 
 def __communityToDict(community: Community):
     styles = []
