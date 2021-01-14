@@ -3,7 +3,7 @@ from time import sleep
 from django.core.management.base import BaseCommand
 
 from events.service import get
-from communities.models import Community, Style, Contact
+from communities.models import Community, Style, Contact, EventCounter
 
 SECONDS_BETWEEN_QUERIES = 10
 
@@ -11,8 +11,15 @@ class Command(BaseCommand):
     help = 'Loads events and updates the database'
 
     def handle(self, *args, **options):
+        eventCounter = EventCounter()
+        try:
+            eventCounter = EventCounter.objects.all()[0]
+        except EventCounter.DoesNotExist:
+            pass
         while True:
-            for event in get(since=-1): # TODO! Keep track of last seen event
+            for event in get(since=eventCounter.lastSeen):
+                eventCounter.lastSeen = event.id
+                eventCounter.save()
                 if event.name == 'AddCommunity':
                     addCommunity(event)
                 # TODO Add more event handling:

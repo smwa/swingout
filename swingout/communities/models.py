@@ -31,3 +31,6 @@ class Contact(models.Model):
     emailAddress = models.EmailField(default='')
     phoneNumber = models.CharField(default='', max_length=64)
     url = models.CharField(default='', max_length=512)
+
+class EventCounter(models.Model):
+    lastSeen = models.BigIntegerField(default=-1)
