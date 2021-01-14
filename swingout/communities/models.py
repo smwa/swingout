@@ -14,14 +14,14 @@ class Community(models.Model):
         return self.label
 
 class Style(models.Model):
-    LINDY_HOP = '1' # These must be strings
+    LINDY_HOP = 'Lindy Hop'
     STYLES = (
-        (LINDY_HOP, 'Lindy Hop'),
+        (LINDY_HOP, LINDY_HOP),
         # TODO add more
     )
     community = models.ForeignKey(Community, on_delete=models.CASCADE)
     style = models.CharField(
-        max_length=1,
+        max_length=32,
         choices=STYLES,
         default=LINDY_HOP
     )

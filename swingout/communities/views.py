@@ -9,6 +9,8 @@ from events.service import create as createEvent
 
 from .models import Community, Style, Contact
 
+# TODO Handle update requests, maybe in different django app
+
 @csrf_exempt
 def index(request):
     if request.method == 'GET':
@@ -26,7 +28,7 @@ def post(request):
         'styles': loadJson(request.POST.get('styles')),
         'contacts': loadJson(request.POST.get('contacts')),
     }
-    # TODO Validate data
+    # TODO! Validate data
     createEvent('AddCommunity', data)
 
 def get(request):
@@ -46,9 +48,7 @@ def __communityToDict(community: Community):
     except Style.DoesNotExist:
         styleObjects = []
     for style in styleObjects:
-        for tuples in Style.STYLES:
-            if tuples[0] == style.style:
-                styles.append(tuples[1])
+        styles.append(style.style)
 
     return {
         'uuid': community.uuid,

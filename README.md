@@ -26,10 +26,10 @@ Update community request:
   I then add new events manually, which include timestamps.
 
 Actions:
-  CommunityAdded(UUID, label, lat, long, url, email|phone|facebookUserUrl)
-  CommunityUpdateRequested(UUID, message)
-  CommunityVerified(UUID, methods(like urls, emailAddresses, or phoneNumbers))
-  CommunityFailedVerification(UUID, methods)
-  CommunityUpdated(UUID, <community fields>)
+  CommunityAdded(uuid, label, latitude, longitude, url, styles, contacts)
+  CommunityUpdateRequested(uuid, message)
+  CommunityVerified(uuid, message)
+  CommunityFailedVerification(uuid, message)
+  CommunityUpdated(uuid, label, latitude, longitude, url, styles, contacts)
 
 <!-- vim: set ts=2 sw=2 : -->

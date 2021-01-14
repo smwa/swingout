@@ -12,5 +12,7 @@ def get(since: int = -1, maxCount: Optional[int] = None) -> ListType[Event]:
         return []
 
 def create(name: str, data: dict) -> None:
-    event = Event(name=name, data=data)
+    event = Event()
+    event.name = name
+    event.data = data
     event.save()
