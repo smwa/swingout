@@ -14,7 +14,6 @@ Community
   }[]
   timeAdded
 
-
 Verify Community is active:
   manually check url, and contact one of the contacts.
   Then add an event saying they are verified, or are marked defunct.
@@ -26,15 +25,11 @@ Update community request:
   including adding or removing contact info.
   I then add new events manually, which include timestamps.
 
-
 Actions:
   CommunityAdded(UUID, label, lat, long, url, email|phone|facebookUserUrl)
   CommunityUpdateRequested(UUID, message)
   CommunityVerified(UUID, methods(like urls, emailAddresses, or phoneNumbers))
   CommunityFailedVerification(UUID, methods)
   CommunityUpdated(UUID, <community fields>)
-
-
-
 
 <!-- vim: set ts=2 sw=2 : -->
