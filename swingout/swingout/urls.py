@@ -19,4 +19,5 @@ from django.urls import include, path
 urlpatterns = [
     path('api/communities/', include('communities.urls')),
     path('admin/', admin.site.urls),
+    path('', include('public.urls')),
 ]
