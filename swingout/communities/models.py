@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.translation import gettext as _
 
 class Community(models.Model):
     uuid = models.CharField(max_length=36)
@@ -20,8 +21,8 @@ class Style(models.Model):
     LINDY_HOP = 'Lindy Hop'
     WEST_COAST_SWING = 'West Coast Swing'
     STYLES = (
-        (LINDY_HOP, LINDY_HOP),
-        (WEST_COAST_SWING, WEST_COAST_SWING),
+        (LINDY_HOP, _(LINDY_HOP)),
+        (WEST_COAST_SWING, _(WEST_COAST_SWING)),
         # TODO add more
     )
     community = models.ForeignKey(Community, on_delete=models.CASCADE)
