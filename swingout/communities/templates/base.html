@@ -1,5 +1,4 @@
 {% load i18n %}
-{% load static %}
 <!doctype html>
 
 <html lang="en">
@@ -14,7 +13,22 @@
     href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
     crossorigin="anonymous">
-  <link rel="stylesheet" type="text/css" href="{% static 'communities/index.css' %}">
+  <style>
+    html, body {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+    }
+
+    #map {
+        height: 100%;
+    }
+
+    #id_contactOne, #id_contactTwo, #id_contactThree {
+        min-width: 24em;
+    }
+  </style>
   {% block head %}{% endblock %}
 </head>
 
