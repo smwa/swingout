@@ -15,6 +15,8 @@ from .forms import AddCommunityForm, RequestCommunityUpdateForm
 
 from .management.commands.communities_process_events import SECONDS_BETWEEN_QUERIES
 
+# TODO Finish setting up translation
+
 def index(request):
     communities = []
     try:
