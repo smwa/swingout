@@ -10,7 +10,7 @@ from django.shortcuts import render
 from django.http import JsonResponse, HttpResponseRedirect
 from django.utils.translation import gettext as _
 
-from events.service import create as createEvent
+from eventer.service import create as createEvent
 
 from .models import Community, Style, Contact
 from .forms import AddCommunityForm, RequestCommunityUpdateForm

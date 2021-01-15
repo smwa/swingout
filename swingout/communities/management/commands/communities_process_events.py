@@ -2,7 +2,7 @@ from time import sleep
 
 from django.core.management.base import BaseCommand
 
-from events.service import get
+from eventer.service import get
 from communities.models import Community, Style, Contact, EventCounter
 
 SECONDS_BETWEEN_QUERIES = 10

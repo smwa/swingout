@@ -34,7 +34,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'communities.apps.CommunitiesConfig',
-    'events.apps.EventsConfig',
+    'eventer.apps.EventerConfig',
     'crispy_forms',
     'django.contrib.admin',
     'django.contrib.auth',
