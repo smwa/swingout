@@ -63,7 +63,7 @@
             if (pointer == null) {
                 pointer = L.popup()
                     .setLatLng(e.latlng)
-                    .setContent("<a href='{% url 'public:addCommunity' %}'>{% translate 'Add a community here?' %}</a>")
+                    .setContent("<a href='{% url 'communities:addCommunity' %}'>{% translate 'Add a community here?' %}</a>")
                     .openOn(map);
             } else {
                 pointer = null;

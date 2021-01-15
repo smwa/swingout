@@ -74,7 +74,7 @@ def add(request, latitude=0.0, longitude=0.0):
                     contacts.append(contact)
             data['contacts'] = contacts
             createEvent('CommunityAdded', data)
-            return HttpResponseRedirect(reverse('communities:addThankYou'))
+            return HttpResponseRedirect(reverse('communities:thankYou'))
     else:
         form = AddCommunityForm()
 
@@ -92,6 +92,9 @@ def requestUpdate(request, uuid):
     else:
         form = RequestCommunityUpdateForm()
     return render(request, 'communities/requestUpdate.html', {'form': form, 'label': community.label})
+
+def map(request):
+    return render(request, 'communities/map.html', {})
 
 def __communityToDict(community: Community):
     styles = []
