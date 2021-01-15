@@ -1,8 +1,6 @@
 from uuid import uuid4
 from json import loads as loadJson
 
-import validators
-
 from django.core.exceptions import ValidationError
 from django.core.validators import URLValidator, EmailValidator
 from django.urls import reverse
