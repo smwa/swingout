@@ -16,11 +16,11 @@
     crossorigin=""></script>
     <script>
         const map = L.map('map')
-            .setView([35.467312, -97.467633], 5)
+            .setView([35.467312, -97.467633], 3)
             .locate({setView: true, maxZoom: 9});
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a target="_blank" href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> | <a target="_blank" href="https://github.com/smwa">smwa@github</a>',
+            attribution: '&copy; <a target="_blank" href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> | <a target="_blank" href="https://github.com/smwa">smwa@github</a> | <a target="_blank" href="mailto:admin@swingout.dance">admin@swingout.dance</a>',
             maxZoom: 12,
             minZoom: 3,
         }).addTo(map);
