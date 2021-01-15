@@ -10,10 +10,10 @@ class Command(BaseCommand):
         try:
             for c in Community.objects.all():
                 c.delete()
-        except Community.DoesNotExist:
+        except Exception:
             pass
         try:
             for ec in EventCounter.objects.all():
                 ec.delete()
-        except EventCounter.DoesNotExist:
+        except Exception:
             pass

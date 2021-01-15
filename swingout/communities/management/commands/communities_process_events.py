@@ -14,7 +14,7 @@ class Command(BaseCommand):
         eventCounter = EventCounter()
         try:
             eventCounter = EventCounter.objects.all()[0]
-        except EventCounter.DoesNotExist:
+        except IndexError:
             pass
         while True:
             for event in get(since=eventCounter.lastSeen):
@@ -30,24 +30,24 @@ class Command(BaseCommand):
     
 def addCommunity(event):
     c = Community()
-    c.label = event.data.label
-    c.latitude = event.data.latitude
-    c.longitude = event.data.longitude
-    c.uuid = event.data.uuid
-    c.url = event.data.url
+    c.label = event.data['label']
+    c.latitude = event.data['latitude']
+    c.longitude = event.data['longitude']
+    c.uuid = event.data['uuid']
+    c.url = event.data['url']
     c.save()
-    for styleName in event.data.styles:
+    for styleName in event.data['styles']:
         style = Style()
         style.community = c
         style.style = styleName
         style.save()
-    for contactData in event.data.contacts:
+    for contactData in event.data['contacts']:
         contact = Contact()
         contact.community = c
         if 'emailAddress' in contactData:
-            contact.emailAddress = contactData.emailAddress
+            contact.emailAddress = contactData['emailAddress']
         if 'phoneNumber' in contactData:
-            contact.phoneNumber = contactData.phoneNumber
+            contact.phoneNumber = contactData['phoneNumber']
         if 'url' in contactData:
-            contact.url = contactData.url
+            contact.url = contactData['url']
         contact.save()

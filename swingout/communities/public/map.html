@@ -1,7 +1,7 @@
 {% extends "../base.html" %}
 {% load i18n %}
 
-{% block title %}{% translate 'Map' %}{% endblock %}
+{% block title %}Map{% endblock %}
 
 {% block head %}
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
@@ -37,7 +37,7 @@
                 for (const communityIndex in data.communities) {
                     const community = data.communities[communityIndex];
 
-                    const header = document.createElement('h4');
+                    const header = document.createElement('h2');
                     header.innerText = community.label;
 
                     const link = document.createElement('a');
@@ -45,10 +45,10 @@
                     link.setAttribute('target', '_blank');
                     link.setAttribute('href', community.url);
 
-                    const linkWrapper = document.createElement('h6');
+                    const linkWrapper = document.createElement('h3');
                     linkWrapper.appendChild(link);
 
-                    let html = `<div>${header.outerHTML}${linkWrapper.outerHTML}</div><div><p><a href='{% url 'communities:requestUpdate' %}/${community.uuid}'>{% translate 'Need to make a change?' %}</a></p></div>`;
+                    let html = `${header.outerHTML}${linkWrapper.outerHTML}`;
 
                     L.marker()
                         .setLatLng([community.latitude, community.longitude])
@@ -63,7 +63,7 @@
             if (pointer == null) {
                 pointer = L.popup()
                     .setLatLng(e.latlng)
-                    .setContent(`<a href='{% url 'communities:add' %}/${e.latlng.lat}/${e.latlng.lng}'>{% translate 'Add a community here?' %}</a>`)
+                    .setContent("<a href='{% url 'public:addCommunity' %}'>{% translate 'Add a community here?' %}</a>")
                     .openOn(map);
             } else {
                 pointer = null;

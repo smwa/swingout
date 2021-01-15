@@ -10,5 +10,8 @@ class Event(models.Model):
 
     def save(self, *args, **kwargs):
         if self.pk is None:
-            super(Event, self).save(*args, **kwargs)
+            return super(Event, self).save(*args, **kwargs)
         raise CanNotUpdateImmutableModelError("Cannot update event because it is immutable")
+
+    def __str__(self):
+        return '({}) {}'.format(self.id, self.name)

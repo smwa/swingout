@@ -18,8 +18,10 @@ class Community(models.Model):
 
 class Style(models.Model):
     LINDY_HOP = 'Lindy Hop'
+    WEST_COAST_SWING = 'West Coast Swing'
     STYLES = (
         (LINDY_HOP, LINDY_HOP),
+        (WEST_COAST_SWING, WEST_COAST_SWING),
         # TODO add more
     )
     community = models.ForeignKey(Community, on_delete=models.CASCADE)
@@ -29,11 +31,20 @@ class Style(models.Model):
         default=LINDY_HOP
     )
 
+    def __str__(self):
+        return '{} - {}'.format(self.community.label, self.style)
+
 class Contact(models.Model):
     community = models.ForeignKey(Community, on_delete=models.CASCADE)
     emailAddress = models.EmailField(default='')
     phoneNumber = models.CharField(default='', max_length=64)
     url = models.CharField(default='', max_length=512)
 
+    def __str__(self):
+        return '{} - {}{}{}'.format(self.community.label, self.emailAddress, self.phoneNumber, self.url)
+
 class EventCounter(models.Model):
     lastSeen = models.BigIntegerField(default=-1)
+
+    def __str__(self):
+        return self.lastSeen

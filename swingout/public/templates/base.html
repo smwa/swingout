@@ -1,0 +1,24 @@
+{% load i18n %}
+{% load static %}
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>Swingout.Dance - {% block title %}{% translate "Discover Dance Communities" %}{% endblock %}</title>
+  <meta name="description" content="{% translate 'Enables discovering dance communities around the world' %}">
+  <meta name="author" content='Michael Smith<"michael.smith.ok@gmail.com">'>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <link rel="stylesheet"
+    href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+    crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="{% static 'public/index.css' %}">
+  {% block head %}{% endblock %}
+</head>
+
+<body>
+  {% block content %}{% endblock %}
+</body>
+</html>

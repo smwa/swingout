@@ -8,7 +8,8 @@ def get(since: int = -1, maxCount: Optional[int] = None) -> ListType[Event]:
         if maxCount is not None:
             events = events.filter(id__lte=since+maxCount)
         return events.order_by('id')
-    except Event.DoesNotExist:
+    except Exception as e:
+        print(e)
         return []
 
 def create(name: str, data: dict) -> None:

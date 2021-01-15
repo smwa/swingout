@@ -3,82 +3,101 @@ from json import loads as loadJson
 
 import validators
 
+from django.core.exceptions import ValidationError
+from django.core.validators import URLValidator, EmailValidator
+from django.urls import reverse
 from django.shortcuts import render
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse, HttpResponseRedirect
 from django.utils.translation import gettext as _
 
 from events.service import create as createEvent
 
 from .models import Community, Style, Contact
+from .forms import AddCommunityForm, RequestCommunityUpdateForm
 
-@csrf_exempt
+from .management.commands.communities_process_events import SECONDS_BETWEEN_QUERIES
+
 def index(request):
-    if request.method == 'GET':
-        return get(request)
-    elif request.method == 'POST':
-        return post(request)
-
-def post(request):
-    data = {
-        'uuid': uuid4(),
-        'label': request.POST.get('label'),
-        'latitude': int(request.POST.get('latitude')),
-        'longitude': request.POST.get('longitude'),
-        'url': request.POST.get('url'),
-        'styles': list(loadJson(request.POST.get('styles'))),
-        'contacts': list(loadJson(request.POST.get('contacts'))),
-    }
-    if data['label'] is None or data['label'] == '':
-        return __fieldErrorResponse('label', 'Label cannot be empty')
-    if data['latitude'] < 0.00001 and data['latitude'] > -0.00001:
-        return __fieldErrorResponse('latitude', 'Latitude cannot be empty')
-    if data['longitude'] < 0.00001 and data['longitude'] > -0.00001:
-        return __fieldErrorResponse('longitude', 'Longitude cannot be empty')
-    if not validators.url(data['url']):
-        return __fieldErrorResponse('url', 'Valid URL required')
-    if len(set(data.styles)) != len(data.styles) or len(data.styles) == 0:
-        return __fieldErrorResponse('styles', 'Styles are required, and cannot contain duplicates')
-    STYLES = [style[0] for style in Style.STYLES]
-    for style in data.styles:
-        if style not in STYLES:
-            return __fieldErrorResponse('styles', 'Invalid style')
-    if len(data['contacts']) < 1 or len(data['contacts']) > 5:
-        return __fieldErrorResponse('contacts', 'You must have between 1 and 5 contacts')
-    for contact in data['contacts']:
-        if len(contact) > 1 or len(contact) < 1:
-            return __fieldErrorResponse('contacts', 'Contacts can only contain one piece of information')
-        if 'emailAddress' not in contact and 'phoneNumber' not in contact and 'url' not in contact:
-            return __fieldErrorResponse('contacts', 'Contacts must have an email address, a phone number, or a url')
-    createEvent('CommunityAdded', data)
-    return JsonResponse({})
-
-def get(request):
     communities = []
     try:
         communityObjects = Community.objects.all()
-    except Community.DoesNotExist:
+    except Exception:
         communityObjects = []
     for community in communityObjects:
         communities.append(__communityToDict(community))
     return JsonResponse({"communities": communities})
 
-def requestUpdate(request):
-    uuid = request.POST.get('uuid')
-    message = str(request.POST.get('message'))
-    if message == '':
-        return __fieldErrorResponse('message', 'Message is required')
-    if len(message) > 512:
-        return __fieldErrorResponse('message', 'Message must be shorter than 512 characters')
+def thankYou(request):
+    return render(request, 'communities/thankYou.html', {'timeOut': SECONDS_BETWEEN_QUERIES})
+
+def add(request, latitude=0.0, longitude=0.0):
+    if request.method == 'POST':
+        post_values = request.POST.copy()
+        post_values.update({
+            'latitude': latitude,
+            'longitude': longitude,
+        })
+        form = AddCommunityForm(post_values)
+        if form.is_valid():
+            data = form.cleaned_data
+            data['uuid'] = str(uuid4())
+
+            contacts = []
+            for contactId in ['One', 'Two', 'Three']:
+                keyField = 'contact{}Type'.format(contactId)
+                valueField = 'contact{}'.format(contactId)
+                key = data[keyField]
+                value = data[valueField]
+                del data[keyField]
+                del data[valueField]
+                if value == '':
+                    continue
+                contact = {key: value}
+                if key == 'emailAddress':
+                    try:
+                        EmailValidator()(value)
+                        contacts.append(contact)
+                    except ValidationError as e:
+                        print("Found invalid email, details:", e, value)
+                        form.add_error(valueField, _('Invalid email address'))
+                        return render(request, 'communities/addCommunity.html', {'form': form})
+                if key == 'url':
+                    try:
+                        URLValidator()(value)
+                        contacts.append(contact)
+                    except ValidationError as e:
+                        print("Found invalid URL, details:", e, value)
+                        form.add_error(valueField, _('Invalid URL'))
+                        return render(request, 'communities/addCommunity.html', {'form': form})
+                if key == 'phoneNumber':
+                    # TODO Validate global phone numbers
+                    contacts.append(contact)
+            data['contacts'] = contacts
+            createEvent('CommunityAdded', data)
+            return HttpResponseRedirect(reverse('communities:addThankYou'))
+    else:
+        form = AddCommunityForm()
+
+    return render(request, 'communities/addCommunity.html', {'form': form})
+
+def requestUpdate(request, uuid):
     community = Community.objects.filter(uuid=uuid)[0]
-    createEvent('CommunityUpdateRequested', {'uuid': community.uuid, 'message': message})
-    return JsonResponse({})
+    if request.method == 'POST':
+        form = RequestCommunityUpdateForm(request.POST)
+        if form.is_valid() and community is not None:
+            data = form.cleaned_data
+            data['uuid'] = community.uuid
+            createEvent('CommunityUpdateRequested', data)
+            return HttpResponseRedirect(reverse('communities:thankYou'))
+    else:
+        form = RequestCommunityUpdateForm()
+    return render(request, 'communities/requestUpdate.html', {'form': form, 'label': community.label})
 
 def __communityToDict(community: Community):
     styles = []
     try:
         styleObjects = Style.objects.filter(community=community)
-    except Style.DoesNotExist:
+    except Exception:
         styleObjects = []
     for style in styleObjects:
         styles.append(style.style)

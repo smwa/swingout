@@ -1,0 +1,21 @@
+{% extends "../base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    {% translate 'Add Community' %}
+{% endblock %}
+
+{% block content %}
+    <div class='container-fluid' style='padding-top: 2em'>
+        <div class='row justify-content-md-center'>
+            <div class='col col-lg-8'>
+                <h3>{% translate 'Add Community' %}</h3>
+                <form method="post">
+                    {% csrf_token %}
+                    {% crispy form %}
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
