@@ -103,7 +103,7 @@ def __communityToDict(community: Community):
     except Exception:
         styleObjects = []
     for style in styleObjects:
-        styles.append(style.style)
+        styles.append(_(style.style))
 
     return {
         'uuid': community.uuid,
@@ -111,6 +111,7 @@ def __communityToDict(community: Community):
         'latitude': community.latitude,
         'longitude': community.longitude,
         'url': community.url,
+        'structure': _(community.structure),
         'styles': styles,
     }
 

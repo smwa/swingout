@@ -1,10 +1,10 @@
 from django import forms
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext as _, pgettext as _p
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Fieldset, ButtonHolder, Submit, Row
 
-from .models import Style
+from .models import Style, Community
 
 CONTACT_TYPES = (
     ('emailAddress', 'Email'),
@@ -14,6 +14,7 @@ CONTACT_TYPES = (
 
 class AddCommunityForm(forms.Form):
     label = forms.CharField(label=_('Name'), max_length=512, widget=forms.TextInput(attrs={'placeholder': _("Lovely Band o' Pirates")}))
+    structure = forms.ChoiceField(label=_p("Financial structure, like non-profit, business, or unincorporated.", "Type"), choices=Community.STRUCTURES)
     latitude = forms.FloatField(max_value=90.0, min_value=-90.0, widget=forms.HiddenInput())
     longitude = forms.FloatField(max_value=80.0, min_value=-180.0, widget=forms.HiddenInput())
     url = forms.URLField(label=_('Website'), max_length=512, widget=forms.TextInput(attrs={'placeholder': "https://www.facebook.com/groups/42"}))
@@ -32,6 +33,7 @@ class AddCommunityForm(forms.Form):
             Fieldset(
                 _('Details'),
                 'label',
+                'structure',
                 'url',
                 'styles',
             ),

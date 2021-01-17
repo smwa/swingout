@@ -82,10 +82,13 @@
                     link.setAttribute('target', '_blank');
                     link.setAttribute('href', community.url);
 
-                    const linkWrapper = document.createElement('h6');
+                    const linkWrapper = document.createElement('h5');
                     linkWrapper.appendChild(link);
 
-                    let html = `<div>${header.outerHTML}${linkWrapper.outerHTML}</div><div><p><a href='{% url 'communities:requestUpdate' %}/${community.uuid}'>{% translate 'Need to make a change?' %}</a></p></div>`;
+                    const structureLabel = document.createElement('h6');
+                    structureLabel.innerText = community.structure;
+
+                    let html = `<div>${header.outerHTML}${structureLabel.outerHTML}${linkWrapper.outerHTML}</div><div><p><a href='{% url 'communities:requestUpdate' %}/${community.uuid}'>{% translate 'Need to make a change?' %}</a></p></div>`;
 
                     L.marker()
                         .setLatLng([community.latitude, community.longitude])
@@ -100,7 +103,7 @@
             if (pointer == null) {
                 pointer = L.popup()
                     .setLatLng(e.latlng)
-                    .setContent(`<a href='{% url 'communities:add' %}/${e.latlng.lat}/${e.latlng.lng}'>{% translate 'Add a community here?' %}</a>`)
+                    .setContent(`<h5><a href='{% url 'communities:add' %}/${e.latlng.lat}/${e.latlng.lng}'>{% translate 'Add a community here?' %}</a></h5>`)
                     .openOn(map);
             } else {
                 pointer = null;

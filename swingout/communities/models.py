@@ -2,8 +2,19 @@ from django.db import models
 from django.utils.translation import gettext as _
 
 class Community(models.Model):
+    UNINCORPORATED = 'Unincorporated'
+    NON_PROFIT = 'Non-Profit'
+    BUSINESS = 'Business'
+
+    STRUCTURES = (
+        (UNINCORPORATED, _(UNINCORPORATED)),
+        (NON_PROFIT, _(NON_PROFIT)),
+        (BUSINESS, _(BUSINESS)),
+    )
+
     uuid = models.CharField(max_length=36)
     label = models.CharField(max_length=256)
+    structure = models.CharField(max_length=16, choices=STRUCTURES, default=UNINCORPORATED)
     latitude = models.FloatField()
     longitude = models.FloatField()
     url = models.CharField(max_length=512)

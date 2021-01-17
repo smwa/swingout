@@ -35,6 +35,7 @@ def addCommunity(event):
     c.longitude = event.data['longitude']
     c.uuid = event.data['uuid']
     c.url = event.data['url']
+    c.structure = event.data['structure']
     c.save()
     for styleName in event.data['styles']:
         style = Style()
