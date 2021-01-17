@@ -38,7 +38,7 @@ class AddCommunityForm(forms.Form):
                 'styles',
             ),
             Fieldset(
-                '{} - <small>{}</small>'.format(_('Contacts'), _('This will not be shown publicly. It is only used to verify or request details.')),
+                '{} - <small>{}</small>'.format(_('Contacts'), _('This will not be shown publicly. We will use this information to contact you and verify or request details.')),
                 Row('contactOneType', 'contactOne'),
                 Row('contactTwoType', 'contactTwo'),
             ),
