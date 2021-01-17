@@ -43,7 +43,7 @@ def add(request, latitude=0.0, longitude=0.0):
             data['uuid'] = str(uuid4())
 
             contacts = []
-            for contactId in ['One', 'Two', 'Three']:
+            for contactId in ['One', 'Two']:
                 keyField = 'contact{}Type'.format(contactId)
                 valueField = 'contact{}'.format(contactId)
                 key = data[keyField]

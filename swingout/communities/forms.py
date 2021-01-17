@@ -24,8 +24,6 @@ class AddCommunityForm(forms.Form):
     contactOne = forms.CharField(label=_("Information"), max_length=512, widget=forms.TextInput(attrs={'placeholder': "sofia@gmail.com"}))
     contactTwoType = forms.ChoiceField(label=_("Type"), choices=CONTACT_TYPES, required=False, initial=CONTACT_TYPES[1])
     contactTwo = forms.CharField(label=_("Information"), max_length=512, required=False, widget=forms.TextInput(attrs={'placeholder': "1-972-098-4242"}))
-    contactThreeType = forms.ChoiceField(label=_("Type"), choices=CONTACT_TYPES, required=False, initial=CONTACT_TYPES[2])
-    contactThree = forms.CharField(label=_("Information"), max_length=512, required=False, widget=forms.TextInput(attrs={'placeholder': "https://facebook.com/maat.ali"}))
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -41,7 +39,6 @@ class AddCommunityForm(forms.Form):
                 '{} - <small>{}</small>'.format(_('Contacts'), _('This will not be shown publicly. It is only used to verify or request details.')),
                 Row('contactOneType', 'contactOne'),
                 Row('contactTwoType', 'contactTwo'),
-                Row('contactThreeType', 'contactThree'),
             ),
             ButtonHolder(
                 Submit('submit', _('Add'), css_class='btn btn-outline-primary btn-lg')
