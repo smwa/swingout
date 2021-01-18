@@ -17,7 +17,8 @@ class Command(BaseCommand):
         except IndexError:
             pass
         while True:
-            for event in get(since=eventCounter.lastSeen):
+            events = get(since=eventCounter.lastSeen)
+            for event in events:
                 eventCounter.lastSeen = event.id
                 eventCounter.save()
                 if event.name == 'CommunityAdded':
@@ -26,7 +27,8 @@ class Command(BaseCommand):
                 # CommunityVerified(uuid, methods(like urls, emailAddresses, or phoneNumbers))
                 # CommunityFailedVerification(uuid, methods)
                 # CommunityUpdated(uuid, <community fields>)
-            sleep(SECONDS_BETWEEN_QUERIES)
+            if len(events) < 1:
+                sleep(SECONDS_BETWEEN_QUERIES)
     
 def addCommunity(event):
     c = Community()

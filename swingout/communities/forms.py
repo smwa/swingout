@@ -63,6 +63,6 @@ class RequestCommunityUpdateForm(forms.Form):
                 'message',
             ),
             ButtonHolder(
-                Submit('submit', _('Submit'), css_class='btn btn-outline-primary btn-lg')
+                Submit('submit', _('Submit'), css_class='btn-lg')
             ),
         )
