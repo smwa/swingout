@@ -29,13 +29,32 @@ class Community(models.Model):
         return self.label
 
 class Style(models.Model):
+    BALBOA = 'Balboa'
+    BLUES = 'Blues'
+    BOOGIE_WOOGIE = 'Boogie Woogie'
+    CHARLESTON = 'Charleston'
+    CHICAGO_STEPPING = "Chicago Steppin'"
+    EAST_COAST_SWING = 'East Coast Swing'
+    FUSION = 'Fusion'
     LINDY_HOP = 'Lindy Hop'
+    SHAG = 'Shag'
     WEST_COAST_SWING = 'West Coast Swing'
-    STYLES = (
-        (LINDY_HOP, _(LINDY_HOP)),
-        (WEST_COAST_SWING, _(WEST_COAST_SWING)),
-        # TODO add more
-    )
+
+    __STYLES_LIST = [
+        BALBOA,
+        BLUES,
+        BOOGIE_WOOGIE,
+        CHARLESTON,
+        CHICAGO_STEPPING,
+        EAST_COAST_SWING,
+        FUSION,
+        LINDY_HOP,
+        SHAG,
+        WEST_COAST_SWING,
+    ]
+
+    STYLES = tuple([(style, _(style)) for style in __STYLES_LIST])
+    
     community = models.ForeignKey(Community, on_delete=models.CASCADE)
     style = models.CharField(
         max_length=32,

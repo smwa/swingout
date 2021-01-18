@@ -12,13 +12,17 @@ CONTACT_TYPES = (
     ('url', 'URL, such as a Facebook page'),
 )
 
+STYLES_SORTED = list(Style.STYLES)
+STYLES_SORTED.sort(key=lambda x:x[1])
+STYLES_SORTED = tuple(STYLES_SORTED)
+
 class AddCommunityForm(forms.Form):
     label = forms.CharField(label=_('Name'), max_length=512, widget=forms.TextInput(attrs={'placeholder': _("Lovely Band o' Pirates")}))
-    structure = forms.ChoiceField(label=_p("Financial structure, like non-profit, business, or unincorporated.", "Type"), choices=Community.STRUCTURES)
+    structure = forms.ChoiceField(label=_p("Financial structure, like non-profit, business, or unincorporated.", "Type"), choices=Community.STRUCTURES, initial=Community.NON_PROFIT)
     latitude = forms.FloatField(max_value=90.0, min_value=-90.0, widget=forms.HiddenInput())
     longitude = forms.FloatField(max_value=80.0, min_value=-180.0, widget=forms.HiddenInput())
     url = forms.URLField(label=_('Website'), max_length=512, widget=forms.TextInput(attrs={'placeholder': "https://www.facebook.com/groups/42"}))
-    styles = forms.MultipleChoiceField(label=_("Dance Styles"), choices=Style.STYLES, widget=forms.CheckboxSelectMultiple())
+    styles = forms.MultipleChoiceField(label=_("Dance Styles"), choices=STYLES_SORTED, widget=forms.CheckboxSelectMultiple())
 
     # These fields are referenced in index.css. If you update the field names, update those references.
     contactOneType = forms.ChoiceField(label=_("Type"), choices=CONTACT_TYPES)
