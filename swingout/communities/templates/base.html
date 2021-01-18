@@ -15,10 +15,32 @@
     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
     crossorigin="anonymous">
   <link href="https://bootswatch.com/4/flatly/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
   <style>
     @import "https://bootswatch.com/4/darkly/bootstrap.min.css" screen and (prefers-color-scheme: dark);
+    @media (prefers-color-scheme: dark) {
+      .select2-results__option--selectable {
+        background-color: #222;
+      }
+
+      .select2-results__option--selected {
+        background-color: #777 !important;
+      }
+
+      .select2-results__option--selectable.select2-results__option--highlighted {
+        background-color: #333 !important;
+      }
+
+      .select2-results__option--selected.select2-results__option--highlighted {
+        background-color: #888 !important;
+      }
+
+      .select2-selection__choice {
+        background-color: #444 !important;
+        color: #ddd;
+      }
+    }
   </style>
-  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
 
   <style>
     html, body {
@@ -34,6 +56,10 @@
 
     #id_contactOne, #id_contactTwo {
         min-width: 24em;
+    }
+
+    .select2-selection__choice__remove {
+      border: none !important;
     }
 
   </style>

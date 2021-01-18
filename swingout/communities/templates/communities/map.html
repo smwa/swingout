@@ -1,8 +1,6 @@
 {% extends "../base.html" %}
 {% load i18n %}
 
-{% block title %}{% translate 'Map' %}{% endblock %}
-
 {% block head %}
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
@@ -23,13 +21,10 @@
             </div>
             <div class="modal-body">
                 <p>
-                    {% translate "Swingout.dance aims to help people discover dancing communities around the world. We would love anyone and everyone to help us make this a valuable tool!" %}
+                    {% translate "Swingout.Dance aims to help people discover dancing communities around the world. We welcome everyone to join us in making it better!" %}
                 </p>
                 <p>
-                    {% translate "Add new communities by tapping on that city and clicking add, suggest changes by clicking on current ones, and send us suggestions using the email address in the bottom corner." %}
-                </p>
-                <p>
-                    {% translate "Email us if you would like to help translate this site into new languages. Developers can find the source code by following the Github link in the bottom corner." %}
+                    {% translate "Add new communities by tapping on that city and clicking add, and send us suggestions using the email address in the bottom corner. Email us if you would like to help translate this site into new languages. Developers can find the source code by following the Github link in the bottom corner." %}
                 </p>
                 <p>
                     {% translate "Please enjoy, and help us spread the word!" %}
@@ -54,7 +49,7 @@
         }).addTo(map);
 
         // Show welcome modal
-        const visitedCookieName = 'visited1'; // Bump this number for welcomeModal changes
+        const visitedCookieName = 'visited0'; // Bump this number for welcomeModal changes
         if (document.cookie.indexOf(`${visitedCookieName}=true`) == -1) {
             const thirtydays = 1000*60*60*24*30;
             const expires = new Date((new Date()).valueOf() +  thirtydays);
@@ -74,7 +69,7 @@
                 for (const communityIndex in data.communities) {
                     const community = data.communities[communityIndex];
 
-                    const header = document.createElement('h4');
+                    const header = document.createElement('h3');
                     header.innerText = community.label;
 
                     const link = document.createElement('a');
@@ -82,13 +77,25 @@
                     link.setAttribute('target', '_blank');
                     link.setAttribute('href', community.url);
 
-                    const linkWrapper = document.createElement('h5');
-                    linkWrapper.appendChild(link);
-
                     const structureLabel = document.createElement('h6');
                     structureLabel.innerText = community.structure;
 
-                    let html = `<div>${header.outerHTML}${structureLabel.outerHTML}${linkWrapper.outerHTML}</div><div><p><a href='{% url 'communities:requestUpdate' %}/${community.uuid}'>{% translate 'Need to make a change?' %}</a></p></div>`;
+                    let html =
+                      `<div style="font-size: 125%">`
+                        + `<div>`
+                            + `${header.outerHTML}`
+                            + `${structureLabel.outerHTML}`
+                            + `<h5>${link.outerHTML}</h4>`
+                        + `</div>`
+                        + `<div>`
+                        + `${community.styles.map((style) => `<span class="badge badge-secondary">${style}</span>`).join(' ')}`
+                        + `</div>`
+                        + `<div style="padding-top: 0.4em;">`
+                            + `<a href='{% url 'communities:requestUpdate' %}/${community.uuid}'>`
+                                + `{% translate 'Need to make a change?' %}`
+                            + `</a>`
+                        + `</div>`
+                    + `</div>`;
 
                     L.marker()
                         .setLatLng([community.latitude, community.longitude])
