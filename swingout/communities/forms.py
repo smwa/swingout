@@ -47,7 +47,7 @@ class AddCommunityForm(forms.Form):
                 Row('contactTwoType', 'contactTwo'),
             ),
             ButtonHolder(
-                Submit('submit', _('Add'), css_class='btn btn-outline-primary btn-lg')
+                Submit('submit', _('Submit'), css_class='btn btn-outline-primary btn-lg')
             ),
         )
 

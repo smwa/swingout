@@ -20,7 +20,9 @@
     </div>
     <script>
         $(document).ready(function() {
-            $('#id_styles').select2();
+            $('#id_styles').select2({
+                closeOnSelect: false,
+            });
         });
     </script>
 {% endblock %}
