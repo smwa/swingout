@@ -32,24 +32,28 @@ class Style(models.Model):
     BALBOA = 'Balboa'
     BLUES = 'Blues'
     BOOGIE_WOOGIE = 'Boogie Woogie'
+    CAROLINA_SHAG = 'Carolina Shag'
     CHARLESTON = 'Charleston'
     CHICAGO_STEPPING = "Chicago Steppin'"
+    COLLEGIATE_SHAG = 'Collegiate Shag'
     EAST_COAST_SWING = 'East Coast Swing'
     FUSION = 'Fusion'
     LINDY_HOP = 'Lindy Hop'
-    SHAG = 'Shag'
+    SAINT_LOUIS_SHAG = 'St. Louis Shag'
     WEST_COAST_SWING = 'West Coast Swing'
 
     __STYLES_LIST = [
         BALBOA,
         BLUES,
         BOOGIE_WOOGIE,
+        CAROLINA_SHAG,
         CHARLESTON,
         CHICAGO_STEPPING,
+        COLLEGIATE_SHAG,
         EAST_COAST_SWING,
         FUSION,
         LINDY_HOP,
-        SHAG,
+        SAINT_LOUIS_SHAG,
         WEST_COAST_SWING,
     ]
 

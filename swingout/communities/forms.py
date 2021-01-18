@@ -22,7 +22,7 @@ class AddCommunityForm(forms.Form):
     latitude = forms.FloatField(max_value=90.0, min_value=-90.0, widget=forms.HiddenInput())
     longitude = forms.FloatField(max_value=80.0, min_value=-180.0, widget=forms.HiddenInput())
     url = forms.URLField(label=_('Website'), max_length=512, widget=forms.TextInput(attrs={'placeholder': "https://www.facebook.com/groups/42"}))
-    styles = forms.MultipleChoiceField(label=_("Dance Styles"), choices=STYLES_SORTED, widget=forms.CheckboxSelectMultiple())
+    styles = forms.MultipleChoiceField(label=_("Dance Styles"), choices=STYLES_SORTED)
 
     # These fields are referenced in index.css. If you update the field names, update those references.
     contactOneType = forms.ChoiceField(label=_("Type"), choices=CONTACT_TYPES)
