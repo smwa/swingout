@@ -39,8 +39,10 @@
     crossorigin=""></script>
     <script>
         const map = L.map('map')
-            .setView([35.467312, -97.467633], 3)
-            .locate({setView: true, maxZoom: 9});
+            .setView([35.467312, -97.467633], 3);
+        if (!window.location.hash) {
+            map.locate({setView: true, maxZoom: 8});
+        }
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a target="_blank" href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> | <a target="_blank" href="https://github.com/smwa/swingout/">github.com</a> | <a target="_blank" href="mailto:admin@swingout.dance">admin@swingout.dance</a> | <a href="javascript:;" data-toggle="modal" data-target="#welcomeModal">{% translate "Welcome" %}</a>',
@@ -63,9 +65,13 @@
             });
         }
 
+        let communities = [];
+
         fetch("{% url 'communities:index' %}")
             .then(response => response.json())
+            .then((data) => { communities = data.communities; return data; })
             .then(data => {
+                const hash = window.location.hash.replace('#', '');
                 for (const communityIndex in data.communities) {
                     const community = data.communities[communityIndex];
 
@@ -97,10 +103,28 @@
                         + `</div>`
                     + `</div>`;
 
-                    L.marker()
-                        .setLatLng([community.latitude, community.longitude])
+                    const thisCommunityHash = `${community.uuid}`;
+                    const marker = L.marker([community.latitude, community.longitude], {
+                            title: community.label,
+                            alt: community.label,
+                        })
+                        .on('popupopen', () => {
+                            if(history.pushState) {
+                                window.history.replaceState(null, null, '#' + thisCommunityHash);
+                            }
+                            else {
+                                window.location.hash = thisCommunityHash;
+                            }
+                        })
+                        .on('popupclose', () => {
+                            window.location.hash = '';
+                        })
                         .bindPopup(html)
                         .addTo(map);
+                    if (hash === thisCommunityHash) {
+                        marker.openPopup();
+                        map.setView([community.latitude, community.longitude], 8);
+                    }
                 }
             });
 

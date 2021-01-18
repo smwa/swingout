@@ -27,8 +27,8 @@ def index(request):
         communities.append(__communityToDict(community))
     return JsonResponse({"communities": communities})
 
-def thankYou(request):
-    return render(request, 'communities/thankYou.html', {'timeOut': SECONDS_BETWEEN_QUERIES})
+def thankYou(request, uuid):
+    return render(request, 'communities/thankYou.html', {'timeOut': SECONDS_BETWEEN_QUERIES, 'uuid': uuid})
 
 def add(request, latitude=0.0, longitude=0.0):
     if request.method == 'POST':
@@ -74,7 +74,7 @@ def add(request, latitude=0.0, longitude=0.0):
                     contacts.append(contact)
             data['contacts'] = contacts
             createEvent('CommunityAdded', data)
-            return HttpResponseRedirect(reverse('communities:thankYou'))
+            return HttpResponseRedirect(reverse('communities:thankYou', args=[data['uuid']]))
     else:
         form = AddCommunityForm()
 
@@ -88,7 +88,7 @@ def requestUpdate(request, uuid):
             data = form.cleaned_data
             data['uuid'] = community.uuid
             createEvent('CommunityUpdateRequested', data)
-            return HttpResponseRedirect(reverse('communities:thankYou'))
+            return HttpResponseRedirect(reverse('communities:thankYou', args=[community.uuid]))
     else:
         form = RequestCommunityUpdateForm()
     return render(request, 'communities/requestUpdate.html', {'form': form, 'label': community.label})
