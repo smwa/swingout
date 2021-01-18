@@ -1,0 +1,8 @@
+{
+    "name": "Swingout.dance",
+    "short_name": "Swingout",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#fff",
+    "description": "Dance community discoverer"
+}
