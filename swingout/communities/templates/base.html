@@ -8,17 +8,17 @@
   <title>Swingout.Dance - {% block title %}{% translate "Discover Dance Communities" %}{% endblock %}</title>
   <meta name="description" content="{% translate 'Enables discovering dance communities around the world' %}">
   <meta name="author" content='Michael Smith<"michael.smith.ok@gmail.com">'>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="manifest" href="manifest.json">
   <link rel="stylesheet"
     href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
     crossorigin="anonymous">
-  <link href="https://bootswatch.com/4/flatly/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+  <link href="https://bootswatch.com/4/flatly/bootstrap.min.css" rel="stylesheet" media="(prefers-color-scheme: light)" />
+  <link href="https://bootswatch.com/4/darkly/bootstrap.min.css" rel="stylesheet" media="not all and (prefers-color-scheme: light)" />
   <style>
-    @import "https://bootswatch.com/4/darkly/bootstrap.min.css" screen and (prefers-color-scheme: dark);
-    @media (prefers-color-scheme: dark) {
+    @media not all and (prefers-color-scheme: light) {
       .select2-results__option--selectable {
         background-color: #222;
       }
@@ -40,9 +40,7 @@
         color: #ddd;
       }
     }
-  </style>
 
-  <style>
     html, body {
         padding: 0;
         margin: 0;
@@ -62,6 +60,9 @@
       border: none !important;
     }
 
+    div.leaflet-control-attribution {
+      font-size: 12px !important;
+    }
   </style>
   {% block head %}{% endblock %}
   <script

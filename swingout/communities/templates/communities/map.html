@@ -40,12 +40,20 @@
     <script>
         const map = L.map('map')
             .setView([35.467312, -97.467633], 3);
-        if (!window.location.hash) {
+        const findMe = () => {
             map.locate({setView: true, maxZoom: 8});
+        }
+        if (!window.location.hash && navigator && navigator.permissions) {
+            navigator.permissions.query({name:'geolocation'}).then(function(result) {
+                console.log(result);
+                if (result.state === 'granted') {
+                    findMe();
+                }
+            });
         }
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a target="_blank" href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> | <a target="_blank" href="https://github.com/smwa/swingout/">github.com</a> | <a target="_blank" href="mailto:admin@swingout.dance">admin@swingout.dance</a> | <a href="javascript:;" data-toggle="modal" data-target="#welcomeModal">{% translate "Welcome" %}</a>',
+            attribution: '&copy; <a target="_blank" rel="noreferrer" href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> | <a target="_blank" rel="noreferrer" href="https://github.com/smwa/swingout/">github.com</a> | <a target="_blank" rel="noreferrer" href="mailto:admin@swingout.dance">admin@swingout.dance</a> | <a href="javascript:;" data-toggle="modal" data-target="#welcomeModal">{% translate "Welcome" %}</a>',
             maxZoom: 12,
             minZoom: 2,
         }).addTo(map);
@@ -58,6 +66,11 @@
             document.cookie = `${visitedCookieName}=true;expires=` +  expires.toUTCString();
             $('#welcomeModal').modal();
         }
+
+        // On welcome modal close
+        $('#welcomeModal').on('hidden.bs.modal', () => {
+            findMe();
+        });
 
         const htmlEncode = (string) => {
             return string.replace(/[\u00A0-\u9999<>\&]/g, function(i) {
@@ -81,6 +94,7 @@
                     const link = document.createElement('a');
                     link.innerText = community.url.replace('http://', '').replace('https://', '');
                     link.setAttribute('target', '_blank');
+                    link.setAttribute('rel', 'noreferrer');
                     link.setAttribute('href', community.url);
 
                     const structureLabel = document.createElement('h6');
