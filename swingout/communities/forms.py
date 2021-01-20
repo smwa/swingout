@@ -9,26 +9,34 @@ from .models import Style, Community
 CONTACT_TYPES = (
     ('emailAddress', 'Email'),
     ('phoneNumber', 'Phone'),
-    ('url', 'URL, such as a Facebook page'),
+    ('url', 'Website'),
 )
 
 STYLES_SORTED = list(Style.STYLES)
 STYLES_SORTED.sort(key=lambda x:x[1])
 STYLES_SORTED = tuple(STYLES_SORTED)
 
+STRUCTURES = [('', '')]
+STRUCTURES.extend(Community.STRUCTURES)
+
 class AddCommunityForm(forms.Form):
-    label = forms.CharField(label=_('Name'), max_length=512, widget=forms.TextInput(attrs={'placeholder': _("Lovely Band o' Pirates")}))
-    structure = forms.ChoiceField(label=_p("Financial structure, like non-profit, business, or unincorporated.", "Type"), choices=Community.STRUCTURES, initial=Community.NON_PROFIT)
+    label_help_text = "{}: {}".format(_('Example'), _p("Community name example", "Lovely Band o' Pirates"))
+    label = forms.CharField(label=_('Name'), max_length=512, help_text=label_help_text)
+    structure = forms.ChoiceField(label=_("Organization Type"), choices=STRUCTURES)
     latitude = forms.FloatField(max_value=90.0, min_value=-90.0, widget=forms.HiddenInput())
     longitude = forms.FloatField(max_value=80.0, min_value=-180.0, widget=forms.HiddenInput())
-    url = forms.URLField(label=_('Website'), max_length=512, widget=forms.TextInput(attrs={'placeholder': "https://www.facebook.com/groups/42"}))
+    url_help_text = "{}: {}".format(_('Example'), _p("Community URL example", "https://www.facebook.com/groups/42"))
+    url = forms.URLField(label=_('Website'), max_length=512, help_text=url_help_text)
     styles = forms.MultipleChoiceField(label=_("Dance Styles"), choices=STYLES_SORTED)
 
-    # These fields are referenced in index.css. If you update the field names, update those references.
-    contactOneType = forms.ChoiceField(label=_("Type"), choices=CONTACT_TYPES)
-    contactOne = forms.CharField(label=_("Information"), max_length=512, widget=forms.TextInput(attrs={'placeholder': "sofia@gmail.com"}))
-    contactTwoType = forms.ChoiceField(label=_("Type"), choices=CONTACT_TYPES, required=False, initial=CONTACT_TYPES[1])
-    contactTwo = forms.CharField(label=_("Information"), max_length=512, required=False, widget=forms.TextInput(attrs={'placeholder': "1-972-098-4242"}))
+    email_contact_example = _p("Contact information example for email address", "sofia@gmail.com")
+    phone_contact_example = _p("Contact information example for phone number", "972-867-5309")
+    url_contact_example = _p("Contact information example for URL", "https://www.facebook.com/john")
+    contact_help_text = "{}: {}, {}, {}".format(_('Examples'), email_contact_example, phone_contact_example, url_contact_example)
+    contactOneType = forms.ChoiceField(label=_p("Contact type", "Type"), choices=CONTACT_TYPES)
+    contactOne = forms.CharField(label=_p("Contact information", "Information"), max_length=512, help_text=contact_help_text)
+    contactTwoType = forms.ChoiceField(label=_p("Contact type", "Type"), choices=CONTACT_TYPES, required=False, initial=CONTACT_TYPES[1])
+    contactTwo = forms.CharField(label=_p("Contact information", "Information"), max_length=512, required=False, help_text=contact_help_text)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
