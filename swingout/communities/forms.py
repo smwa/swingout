@@ -40,6 +40,7 @@ class AddCommunityForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        contact_disclaimer = _('This will not be shown publicly. We will use this information to contact you and verify or request details.')
         self.helper = FormHelper()
         self.helper.layout = Layout(
             Fieldset(
@@ -50,7 +51,7 @@ class AddCommunityForm(forms.Form):
                 'styles',
             ),
             Fieldset(
-                '{} - <small>{}</small>'.format(_('Contacts'), _('This will not be shown publicly. We will use this information to contact you and verify or request details.')),
+                '{} - <small>{}</small>'.format(_('Contacts'), contact_disclaimer),
                 Row('contactOneType', 'contactOne'),
                 Row('contactTwoType', 'contactTwo'),
             ),
@@ -60,7 +61,10 @@ class AddCommunityForm(forms.Form):
         )
 
 class RequestCommunityUpdateForm(forms.Form):
-    message = forms.CharField(label=_('Message'), widget=forms.Textarea(attrs={'placeholder': _("What do you want changed?")}))
+    help_text = _("Tell us what you want changed, or if this community should be removed. "
+              + "Providing a reason may help us make changes sooner. "
+              + "You may put your contact information so we can ask you further questions. ")
+    message = forms.CharField(label=_('Message'), help_text=help_text, widget=forms.Textarea())
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
