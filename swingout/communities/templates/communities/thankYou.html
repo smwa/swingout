@@ -1,5 +1,5 @@
 {% extends "../base.html" %}
-{% load i18n %}
+{% load i18n_discoverer %}
 
 {% block head %}
     <meta http-equiv="refresh" content="{{ timeOut }};url={% url 'communities:map' %}#{{ uuid }}" />

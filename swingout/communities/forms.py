@@ -1,5 +1,5 @@
 from django import forms
-from django.utils.translation import gettext as _, pgettext as _p
+from i18n_discoverer.translation import gettext as _, pgettext as _p
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Fieldset, ButtonHolder, Submit, Row

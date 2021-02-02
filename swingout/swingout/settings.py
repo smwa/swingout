@@ -27,12 +27,18 @@ SECRET_KEY = 'yw#n8oz93_x()@%sk1u33+-=9)eg6*begm19v8--7*bu^41hhd'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'swingout.dance',
+    'www.swingout.dance',
+    'localhost',
+    '127.0.0.1',
+]
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'i18n_discoverer.apps.I18NDiscovererConfig',
     'communities.apps.CommunitiesConfig',
     'eventer.apps.EventerConfig',
     'crispy_forms',
@@ -134,3 +140,8 @@ STATIC_ROOT = './static/'
 
 # Forms
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+# i18n_discoverer
+
+if DEBUG:
+    I18N_DISCOVERER_TRACKING = True

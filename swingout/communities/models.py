@@ -1,5 +1,5 @@
 from django.db import models
-from django.utils.translation import gettext as _
+from i18n_discoverer.translation import gettext as _
 
 class Community(models.Model):
     UNINCORPORATED = 'Unincorporated'

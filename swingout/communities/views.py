@@ -6,7 +6,7 @@ from django.core.validators import URLValidator, EmailValidator
 from django.urls import reverse
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponseRedirect
-from django.utils.translation import gettext as _
+from i18n_discoverer.translation import gettext as _
 
 from eventer.service import create as createEvent
 
