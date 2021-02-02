@@ -4,7 +4,7 @@ from django.conf import settings
 from django.templatetags import i18n
 from i18n_discoverer.models import Message
 
-__TRACK = settings.I18N_DISCOVERER_TRACKING is not None
+__TRACK = bool(settings.I18N_DISCOVERER_TRACKING)
 
 register = Library()
 

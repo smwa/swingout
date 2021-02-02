@@ -7,7 +7,7 @@ from django.utils import translation as __translation
 
 from .models import Message
 
-__TRACK = settings.I18N_DISCOVERER_TRACKING is not None
+__TRACK = bool(settings.I18N_DISCOVERER_TRACKING)
 
 def gettext(message):
     if __TRACK:
