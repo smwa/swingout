@@ -143,5 +143,5 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 # i18n_discoverer
 
-if DEBUG:
-    I18N_DISCOVERER_TRACKING = bool(os.environ.get('I18N_DISCOVERER_TRACKING'))
+
+I18N_DISCOVERER_TRACKING = DEBUG and os.environ.get('I18N_DISCOVERER_TRACKING', False)
