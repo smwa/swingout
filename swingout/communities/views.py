@@ -1,5 +1,5 @@
 from uuid import uuid4
-from json import loads as loadJson
+import json
 
 from django.core.exceptions import ValidationError
 from django.core.validators import URLValidator, EmailValidator
@@ -14,8 +14,6 @@ from .models import Community, Style, Contact
 from .forms import AddCommunityForm, RequestCommunityUpdateForm
 
 from .management.commands.communities_process_events import SECONDS_BETWEEN_QUERIES
-
-# TODO Finish setting up translation
 
 def index(request):
     communities = []
@@ -73,12 +71,26 @@ def add(request, latitude=0.0, longitude=0.0):
                     # TODO Validate global phone numbers
                     contacts.append(contact)
             data['contacts'] = contacts
-            createEvent('CommunityAdded', data)
-            return HttpResponseRedirect(reverse('communities:thankYou', args=[data['uuid']]))
+            request.session['addCommunityData'] = json.dumps(data)
+            return HttpResponseRedirect(reverse('communities:addPreview'))
     else:
         form = AddCommunityForm()
 
     return render(request, 'communities/addCommunity.html', {'form': form})
+
+def add_preview(request):
+    data = json.loads(request.session.get('addCommunityData', {}))
+    if request.method == 'POST':
+        createEvent('CommunityAdded', data)
+        return HttpResponseRedirect(reverse('communities:thankYou', args=[data['uuid']]))
+    community = Community()
+    community.label = data['label']
+    community.url = data['url']
+    return render(request, 'communities/addPreview.html', {
+        'community': community,
+        'url_formatted': community.url.replace('http://', '').replace('https://', ''),
+        'styles': data['styles'],
+    })
 
 def requestUpdate(request, uuid):
     community = Community.objects.filter(uuid=uuid)[0]

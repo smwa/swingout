@@ -1,8 +1,9 @@
 from django import forms
 from i18n_discoverer.translation import gettext as _, pgettext as _p
+from django.urls import reverse
 
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Fieldset, ButtonHolder, Submit, Row
+from crispy_forms.layout import Layout, Fieldset, HTML, ButtonHolder, Submit, Row
 
 from .models import Style, Community
 
@@ -56,7 +57,8 @@ class AddCommunityForm(forms.Form):
                 Row('contactTwoType', 'contactTwo'),
             ),
             ButtonHolder(
-                Submit('submit', _('Submit'), css_class='btn-lg')
+                Submit('submit', _('Preview'), css_class='btn-lg'),
+                HTML('<a class="btn btn-secondary btn-lg" href="{}">{}</a>'.format(reverse('communities:map'), _("Cancel")))
             ),
         )
 
