@@ -8,19 +8,28 @@
   "description": "Discover dance communities around the world",
   "icons": [
     {
+      "src": "static/communities/images/icon_mask.png",
+      "sizes": "256x256",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
       "src": "static/communities/images/icon_small.png",
       "sizes": "64x64",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     },
     {
       "src": "static/communities/images/icon_medium.png",
       "sizes": "256x256",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     },
     {
       "src": "static/communities/images/icon_large.png",
       "sizes": "1024x1024",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     }
   ]
 }
