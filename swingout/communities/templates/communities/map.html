@@ -129,9 +129,15 @@
                             else {
                                 window.location.hash = thisCommunityHash;
                             }
+                            popupOpen = true;
                         })
                         .on('popupclose', () => {
-                            window.location.hash = '';
+                            if(history.pushState) {
+                                window.history.replaceState(null, null, '/');
+                            }
+                            else {
+                                window.location.hash = '';
+                            }
                         })
                         .bindPopup(html)
                         .addTo(map);
@@ -142,16 +148,17 @@
                 }
             });
 
-        let pointer = null;
+        let popupOpen = false;
 
         function onMapClick(e) {
-            if (pointer == null) {
-                pointer = L.popup()
+            if (!popupOpen) {
+                L.popup()
                     .setLatLng(e.latlng)
                     .setContent(`<h5><a href='{% url 'communities:add' %}/${e.latlng.lat}/${e.latlng.lng}'>{% translate 'Add a community here?' %}</a></h5>`)
                     .openOn(map);
+                popupOpen = true;
             } else {
-                pointer = null;
+                popupOpen = false;
             }
         }
 
