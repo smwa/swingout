@@ -1,4 +1,4 @@
-{% extends "../base.html" %}
+{% extends "./base.html" %}
 {% load i18n_discoverer %}
 
 {% block head %}
@@ -45,7 +45,6 @@
         }
         if (!window.location.hash && navigator && navigator.permissions) {
             navigator.permissions.query({name:'geolocation'}).then(function(result) {
-                console.log(result);
                 if (result.state === 'granted') {
                     findMe();
                 }

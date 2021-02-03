@@ -108,6 +108,12 @@ def requestUpdate(request, uuid):
 def map(request):
     return render(request, 'communities/map.html', {})
 
+def manifest(request):
+    return render(request, 'communities/manifest.json', {}, content_type='application/json')
+
+def serviceWorker(request):
+    return render(request, 'communities/service-worker.js', {}, content_type='application/javascript')
+
 def __communityToDict(community: Community):
     styles = []
     try:

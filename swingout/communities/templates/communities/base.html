@@ -11,7 +11,7 @@
   <meta name="author" content='Michael Smith<"michael.smith.ok@gmail.com">'>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="shortcut icon" type="image/png" href="{% static 'communities/images/icon_small.png' %}" />
-  <link rel="manifest" href="{% static 'communities/manifest.json' %}">
+  <link rel="manifest" href="{% url 'communities:manifest' %}">
   <link rel="stylesheet"
     href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
@@ -69,6 +69,11 @@
 			  crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register("{% url 'communities:serviceWorker' %}");
+    }
+  </script>
 </head>
 
 <body>
