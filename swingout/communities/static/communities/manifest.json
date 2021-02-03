@@ -1,8 +1,10 @@
 {
   "name": "Swingout.Dance",
   "short_name": "Swingout",
+  "scope": "../../",
   "start_url": ".",
   "display": "standalone",
+  "theme_color": "#0FB",
   "background_color": "#222",
   "description": "Dance community discoverer",
   "icons": [
