@@ -1,4 +1,5 @@
 {% load i18n_discoverer %}
+{% load static %}
 <!doctype html>
 
 <html lang="en">
@@ -9,7 +10,8 @@
   <meta name="description" content="{% translate 'Enables discovering dance communities around the world' %}">
   <meta name="author" content='Michael Smith<"michael.smith.ok@gmail.com">'>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="manifest" href="manifest.json">
+  <link rel="shortcut icon" type="image/png" href="{% static 'communities/images/icon_small.png' %}" />
+  <link rel="manifest" href="{% static 'communities/manifest.json' %}">
   <link rel="stylesheet"
     href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"

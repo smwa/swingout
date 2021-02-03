@@ -108,9 +108,6 @@ def requestUpdate(request, uuid):
 def map(request):
     return render(request, 'communities/map.html', {})
 
-def manifest(request):
-    return render(request, 'manifest.json', {}, content_type='application/json')
-
 def __communityToDict(community: Community):
     styles = []
     try:

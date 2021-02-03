@@ -1,0 +1,25 @@
+{
+  "name": "Swingout.Dance",
+  "short_name": "Swingout",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#222",
+  "description": "Dance community discoverer",
+  "icons": [
+    {
+      "src": "static/communities/images/icon_small.png",
+      "sizes": "64x64",
+      "type": "image/png"
+    },
+    {
+      "src": "static/communities/images/icon_medium.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    },
+    {
+      "src": "static/communities/images/icon_large.png",
+      "sizes": "1024x1024",
+      "type": "image/png"
+    }
+  ]
+}
