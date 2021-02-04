@@ -26,7 +26,7 @@ class Community(models.Model):
         ]
 
     def __str__(self):
-        return self.label
+        return "{} - {}".format(self.label, self.uuid)
 
 class Style(models.Model):
     BALBOA = 'Balboa'

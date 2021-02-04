@@ -5,7 +5,7 @@ from django.urls import reverse
 from .models import *
 
 class UpdateRequestAdmin(admin.ModelAdmin):
-    readonly_fields = ('message', 'community', 'show_delete_url')
+    readonly_fields = ('message', 'show_delete_url')
     fields = ('message', 'community', 'show_delete_url')
 
     def show_delete_url(self, obj):
