@@ -3,7 +3,7 @@ from time import sleep
 from django.core.management.base import BaseCommand
 
 from eventer.service import get
-from communities.models import Community, Style, Contact, EventCounter
+from communities.models import Community, Style, Contact, EventCounter, UpdateRequest
 
 SECONDS_BETWEEN_QUERIES = 10
 
@@ -17,19 +17,26 @@ class Command(BaseCommand):
         except IndexError:
             pass
         while True:
-            events = get(since=eventCounter.lastSeen)
-            for event in events:
-                eventCounter.lastSeen = event.id
-                eventCounter.save()
-                if event.name == 'CommunityAdded':
-                    addCommunity(event)
-                # TODO Add more event handling:
-                # CommunityVerified(uuid, methods(like urls, emailAddresses, or phoneNumbers))
-                # CommunityFailedVerification(uuid, methods)
-                # CommunityUpdated(uuid, <community fields>)
-            if len(events) < 1:
-                sleep(SECONDS_BETWEEN_QUERIES)
-    
+            try:
+                events = get(since=eventCounter.lastSeen)
+                for event in events:
+                    eventCounter.lastSeen = event.id
+                    eventCounter.save()
+                    if event.name == 'CommunityAdded':
+                        addCommunity(event)
+                    if event.name == 'CommunityUpdateRequested':
+                        addUpdateRequest(event)
+                    if event.name == 'CommunityUpdateRequestHandled':
+                        removeUpdateRequest(event)
+                    # TODO Add more event handling:
+                    # CommunityVerified(uuid, methods(like urls, emailAddresses, or phoneNumbers))
+                    # CommunityFailedVerification(uuid, methods)
+                    # CommunityUpdated(uuid, <community fields>)
+                if len(events) < 1:
+                    sleep(SECONDS_BETWEEN_QUERIES)
+            except Exception as e:
+                print(e)
+
 def addCommunity(event):
     c = Community()
     c.label = event.data['label']
@@ -54,3 +61,15 @@ def addCommunity(event):
         if 'url' in contactData:
             contact.url = contactData['url']
         contact.save()
+
+def addUpdateRequest(event):
+    community = Community.objects.filter(uuid=event.data['community_uuid'])[0]
+    request = UpdateRequest()
+    request.message = event.data['message']
+    request.community = community
+    request.uuid = event.data['uuid']
+    request.save()
+
+def removeUpdateRequest(event):
+    request = UpdateRequest.objects.filter(uuid=event.data['uuid'])
+    request.delete()

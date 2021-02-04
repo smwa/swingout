@@ -83,3 +83,11 @@ class EventCounter(models.Model):
 
     def __str__(self):
         return self.lastSeen
+
+class UpdateRequest(models.Model):
+    message = models.TextField()
+    community = models.ForeignKey(Community, on_delete=models.CASCADE)
+    uuid = models.CharField(max_length=36)
+
+    def __str__(self):
+        return '{}. {}'.format(self.id, self.community.label)

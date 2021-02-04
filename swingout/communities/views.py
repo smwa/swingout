@@ -10,7 +10,7 @@ from i18n_discoverer.translation import gettext as _
 
 from eventer.service import create as createEvent
 
-from .models import Community, Style, Contact
+from .models import Community, Style, Contact, UpdateRequest
 from .forms import AddCommunityForm, RequestCommunityUpdateForm
 
 from .management.commands.communities_process_events import SECONDS_BETWEEN_QUERIES
@@ -82,6 +82,7 @@ def add_preview(request):
     data = json.loads(request.session.get('addCommunityData', {}))
     if request.method == 'POST':
         createEvent('CommunityAdded', data)
+        del request.session['addCommunityData']
         return HttpResponseRedirect(reverse('communities:thankYou', args=[data['uuid']]))
     community = Community()
     community.label = data['label']
@@ -92,13 +93,22 @@ def add_preview(request):
         'styles': data['styles'],
     })
 
+def markUpdateRequestHandled(request, uuid):
+    request = UpdateRequest.objects.filter(uuid=uuid)[0]
+    data = {
+        'uuid': request.uuid
+    }
+    createEvent('CommunityUpdateRequestHandled', data)
+    return JsonResponse({'Success': True})
+
 def requestUpdate(request, uuid):
     community = Community.objects.filter(uuid=uuid)[0]
     if request.method == 'POST':
         form = RequestCommunityUpdateForm(request.POST)
         if form.is_valid() and community is not None:
             data = form.cleaned_data
-            data['uuid'] = community.uuid
+            data['community_uuid'] = community.uuid
+            data['uuid'] = str(uuid4())
             createEvent('CommunityUpdateRequested', data)
             return HttpResponseRedirect(reverse('communities:thankYou', args=[community.uuid]))
     else:

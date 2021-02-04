@@ -13,6 +13,7 @@ urlpatterns = [
     path('communities/thankYou/<uuid:uuid>', views.thankYou, name='thankYou'),
     path('communities/requestUpdate', views.requestUpdate, name='requestUpdate'), # Only used for reverse url lookups
     path('communities/requestUpdate/<uuid:uuid>', views.requestUpdate, name='requestUpdateWithUuid'),
+    path('api/communities/requestUpdate/delete/<uuid:uuid>', views.markUpdateRequestHandled, name='markUpdateRequestHandled'),
     path('manifest.json', views.manifest, name='manifest'),
     path('service-worker.js', views.serviceWorker, name='serviceWorker'),
 ]
