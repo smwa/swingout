@@ -28,7 +28,7 @@ class AddCommunityForm(forms.Form):
     longitude = forms.FloatField(max_value=80.0, min_value=-180.0, widget=forms.HiddenInput())
     url_help_text = "{}: {}".format(_('Example'), _p("Community URL example", "https://www.facebook.com/groups/42"))
     url = forms.URLField(label=_('Website'), max_length=512, help_text=url_help_text)
-    styles = forms.MultipleChoiceField(label=_("Dance Styles"), choices=STYLES_SORTED)
+    styles = forms.MultipleChoiceField(label=_("Dance Styles"), choices=STYLES_SORTED, widget=forms.SelectMultiple(attrs={'style': 'width: 100%'}))
 
     email_contact_example = _p("Contact information example for email address", "sofia@gmail.com")
     phone_contact_example = _p("Contact information example for phone number", "+1-972-867-5309")
