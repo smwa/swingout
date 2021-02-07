@@ -13,7 +13,14 @@ class UpdateRequestAdmin(admin.ModelAdmin):
 
     show_delete_url.short_description = "Delete URL"
 
-admin.site.register(Community)
+class CommunityAdmin(admin.ModelAdmin):
+    readonly_fields = ('show_delete_url',)
+    def show_delete_url(self, obj):
+        return format_html("<a target='_blank' href='{url}'>{uuid}</a>", url=reverse('communities:delete', args=[obj.uuid]), uuid=obj.uuid)
+
+    show_delete_url.short_description = "Delete URL"
+
+admin.site.register(Community, CommunityAdmin)
 admin.site.register(Style)
 admin.site.register(Contact)
 admin.site.register(EventCounter)

@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 from django.core.validators import URLValidator, EmailValidator
 from django.urls import reverse
 from django.shortcuts import render
-from django.http import JsonResponse, HttpResponseRedirect
+from django.http import JsonResponse, HttpResponseRedirect, HttpResponseForbidden
 from i18n_discoverer.translation import gettext as _
 
 from eventer.service import create as createEvent
@@ -99,6 +99,16 @@ def markUpdateRequestHandled(request, uuid):
         'uuid': request.uuid
     }
     createEvent('CommunityUpdateRequestHandled', data)
+    return JsonResponse({'Success': True})
+
+def delete(request, uuid):
+    if not request.user.has_perm('communities.delete_community'):
+        return HttpResponseForbidden(_('You do not have access to delete communities'))
+    community = Community.objects.filter(uuid=uuid)[0]
+    data = {
+        'uuid': community.uuid
+    }
+    createEvent('CommunityDeleted', data)
     return JsonResponse({'Success': True})
 
 def requestUpdate(request, uuid):

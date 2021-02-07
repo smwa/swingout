@@ -28,10 +28,8 @@ class Command(BaseCommand):
                         addUpdateRequest(event)
                     if event.name == 'CommunityUpdateRequestHandled':
                         removeUpdateRequest(event)
-                    # TODO Add more event handling:
-                    # CommunityVerified(uuid, methods(like urls, emailAddresses, or phoneNumbers))
-                    # CommunityFailedVerification(uuid, methods)
-                    # CommunityUpdated(uuid, <community fields>)
+                    if event.name == 'CommunityDeleted':
+                        removeCommunity(event)
                 if len(events) < 1:
                     sleep(SECONDS_BETWEEN_QUERIES)
             except Exception as e:
@@ -73,3 +71,6 @@ def addUpdateRequest(event):
 def removeUpdateRequest(event):
     request = UpdateRequest.objects.filter(uuid=event.data['uuid'])
     request.delete()
+
+def removeCommunity(event):
+    Community.objects.filter(uuid=event.data['uuid']).delete()
