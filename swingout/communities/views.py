@@ -1,6 +1,8 @@
 from uuid import uuid4
 import json
 
+import phonenumbers
+
 from django.core.exceptions import ValidationError
 from django.core.validators import URLValidator, EmailValidator
 from django.urls import reverse
@@ -68,7 +70,14 @@ def add(request, latitude=0.0, longitude=0.0):
                         form.add_error(valueField, _('Invalid URL'))
                         return render(request, 'communities/addCommunity.html', {'form': form})
                 if key == 'phoneNumber':
-                    # TODO Validate global phone numbers
+                    try:
+                        parsed_phone_number = phonenumbers.parse(value)
+                        assert phonenumbers.is_possible_number(parsed_phone_number)
+                        assert phonenumbers.is_valid_number(parsed_phone_number)
+                    except Exception as e:
+                        print("Found invalid phone number, details:", e, value)
+                        form.add_error(valueField, _('Invalid Phone Number. Make sure to include the plus sign(+) and the country code, as in the example below.'))
+                        return render(request, 'communities/addCommunity.html', {'form': form})
                     contacts.append(contact)
             data['contacts'] = contacts
             request.session['addCommunityData'] = json.dumps(data)

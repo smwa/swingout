@@ -31,7 +31,7 @@ class AddCommunityForm(forms.Form):
     styles = forms.MultipleChoiceField(label=_("Dance Styles"), choices=STYLES_SORTED)
 
     email_contact_example = _p("Contact information example for email address", "sofia@gmail.com")
-    phone_contact_example = _p("Contact information example for phone number", "972-867-5309")
+    phone_contact_example = _p("Contact information example for phone number", "+1-972-867-5309")
     url_contact_example = _p("Contact information example for URL", "https://www.facebook.com/john")
     contact_help_text = "{}: {}, {}, {}".format(_('Examples'), email_contact_example, phone_contact_example, url_contact_example)
     contactOneType = forms.ChoiceField(label=_p("Contact type", "Type"), choices=CONTACT_TYPES)
