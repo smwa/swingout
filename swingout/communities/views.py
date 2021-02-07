@@ -88,7 +88,6 @@ def add(request, latitude=0.0, longitude=0.0):
     return render(request, 'communities/addCommunity.html', {'form': form})
 
 def update(request, uuid):
-    # TODO Allow editing contacts
     if not request.user.has_perm('communities.change_community'):
         return HttpResponseForbidden(_('You do not have access to update communities'))
     community = Community.objects.get(uuid=uuid)
@@ -97,10 +96,72 @@ def update(request, uuid):
         if form.is_valid():
             data = form.cleaned_data
             data['uuid'] = community.uuid
+
+            contacts = []
+            for contactId in ['One', 'Two']:
+                keyField = 'contact{}Type'.format(contactId)
+                valueField = 'contact{}'.format(contactId)
+                key = data[keyField]
+                value = data[valueField]
+                del data[keyField]
+                del data[valueField]
+                if value == '':
+                    continue
+                contact = {key: value}
+                if key == 'emailAddress':
+                    try:
+                        EmailValidator()(value)
+                        contacts.append(contact)
+                    except ValidationError as e:
+                        print("Found invalid email, details:", e, value)
+                        form.add_error(valueField, _('Invalid email address'))
+                        return render(request, 'communities/addCommunity.html', {'form': form})
+                if key == 'url':
+                    try:
+                        URLValidator()(value)
+                        contacts.append(contact)
+                    except ValidationError as e:
+                        print("Found invalid URL, details:", e, value)
+                        form.add_error(valueField, _('Invalid URL'))
+                        return render(request, 'communities/addCommunity.html', {'form': form})
+                if key == 'phoneNumber':
+                    try:
+                        parsed_phone_number = phonenumbers.parse(value)
+                        assert phonenumbers.is_possible_number(parsed_phone_number)
+                        assert phonenumbers.is_valid_number(parsed_phone_number)
+                    except Exception as e:
+                        print("Found invalid phone number, details:", e, value)
+                        form.add_error(valueField, _('Invalid Phone Number. Make sure to include the plus sign(+) and the country code, as in the example below.'))
+                        return render(request, 'communities/addCommunity.html', {'form': form})
+                    contacts.append(contact)
+            data['contacts'] = contacts
+
             createEvent('CommunityUpdated', data)
-            print(reverse('communities:map'))
             return HttpResponseRedirect(reverse('communities:thankYou', args=[data['uuid']]))
     else:
+        contacts = community.contact_set.all()
+        contactOneType = ''
+        contactOne = ''
+        if len(contacts) >= 1:
+            contactOneType = 'emailAddress'
+            contactOne = contacts[0].emailAddress
+            if contacts[0].phoneNumber:
+                contactOneType = 'phoneNumber'
+                contactOne = contacts[0].phoneNumber
+            if contacts[0].url:
+                contactOneType = 'url'
+                contactOne = contacts[0].url
+        contactTwoType = ''
+        contactTwo = ''
+        if len(contacts) >= 2:
+            contactTwoType = 'emailAddress'
+            contactTwo = contacts[1].emailAddress
+            if contacts[1].phoneNumber:
+                contactTwoType = 'phoneNumber'
+                contactTwo = contacts[1].phoneNumber
+            if contacts[1].url:
+                contactTwoType = 'url'
+                contactTwo = contacts[1].url
         form = UpdateCommunityForm({
             'label': community.label,
             'structure': community.structure,
@@ -108,6 +169,10 @@ def update(request, uuid):
             'latitude': community.latitude,
             'longitude': community.longitude,
             'styles': [style.style for style in community.style_set.all()],
+            'contactOneType': contactOneType,
+            'contactOne': contactOne,
+            'contactTwoType': contactTwoType,
+            'contactTwo': contactTwo,
         })
 
     return render(request, 'communities/updateCommunity.html', {'form': form})

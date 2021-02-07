@@ -1,9 +1,13 @@
 from time import sleep
+import logging
 
 from django.core.management.base import BaseCommand
 
 from eventer.service import get
 from communities.models import Community, Style, Contact, EventCounter, UpdateRequest
+
+logger = logging.getLogger()
+logger.setLevel(logging.WARNING)
 
 SECONDS_BETWEEN_QUERIES = 10
 
@@ -34,7 +38,7 @@ class Command(BaseCommand):
                 if len(events) < 1:
                     sleep(SECONDS_BETWEEN_QUERIES)
             except Exception as e:
-                print(e)
+                logger.error(str(e), exc_info=True)
 
 def addCommunity(event):
     c = Community()
@@ -69,6 +73,7 @@ def updateCommunity(event):
     community.url = event.data['url']
     community.structure = event.data['structure']
     community.save()
+
     oldStyles = [style.style for style in community.style_set.all()]
     newStyles = event.data['styles']
     for style in oldStyles:
@@ -80,6 +85,18 @@ def updateCommunity(event):
             style_model.community = community
             style_model.style = style
             style_model.save()
+
+    [contact.delete() for contact in community.contact_set.all()]
+    for contactData in event.data['contacts']:
+        contact = Contact()
+        contact.community = community
+        if 'emailAddress' in contactData:
+            contact.emailAddress = contactData['emailAddress']
+        if 'phoneNumber' in contactData:
+            contact.phoneNumber = contactData['phoneNumber']
+        if 'url' in contactData:
+            contact.url = contactData['url']
+        contact.save()
 
 def addUpdateRequest(event):
     community = Community.objects.get(uuid=event.data['community_uuid'])

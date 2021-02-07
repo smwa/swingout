@@ -22,6 +22,11 @@ STRUCTURES.extend(Community.STRUCTURES)
 
 _label_help_text = "{}: {}".format(_('Example'), _p("Community name example", "Lovely Band o' Pirates"))
 _url_help_text = "{}: {}".format(_('Example'), _p("Community URL example", "https://www.facebook.com/groups/42"))
+_email_contact_example = _p("Contact information example for email address", "sofia@gmail.com")
+_phone_contact_example = _p("Contact information example for phone number", "+1-972-867-5309")
+_url_contact_example = _p("Contact information example for URL", "https://www.facebook.com/john")
+_contact_help_text = "{}: {}, {}, {}".format(_('Examples'), _email_contact_example, _phone_contact_example, _url_contact_example)
+_contact_disclaimer = _('This will not be shown publicly. We will use this information to contact you and verify or request details.')
 
 class AddCommunityForm(forms.Form):
     label = forms.CharField(label=_('Name'), max_length=512, help_text=_label_help_text)
@@ -31,18 +36,13 @@ class AddCommunityForm(forms.Form):
     url = forms.URLField(label=_('Website'), max_length=512, help_text=_url_help_text)
     styles = forms.MultipleChoiceField(label=_("Dance Styles"), choices=STYLES_SORTED, widget=forms.SelectMultiple(attrs={'style': 'width: 100%'}))
 
-    email_contact_example = _p("Contact information example for email address", "sofia@gmail.com")
-    phone_contact_example = _p("Contact information example for phone number", "+1-972-867-5309")
-    url_contact_example = _p("Contact information example for URL", "https://www.facebook.com/john")
-    contact_help_text = "{}: {}, {}, {}".format(_('Examples'), email_contact_example, phone_contact_example, url_contact_example)
     contactOneType = forms.ChoiceField(label=_p("Contact type", "Type"), choices=CONTACT_TYPES)
-    contactOne = forms.CharField(label=_p("Contact information", "Information"), max_length=512, help_text=contact_help_text)
+    contactOne = forms.CharField(label=_p("Contact information", "Information"), max_length=512, help_text=_contact_help_text)
     contactTwoType = forms.ChoiceField(label=_p("Contact type", "Type"), choices=CONTACT_TYPES, required=False, initial=CONTACT_TYPES[1])
-    contactTwo = forms.CharField(label=_p("Contact information", "Information"), max_length=512, required=False, help_text=contact_help_text)
+    contactTwo = forms.CharField(label=_p("Contact information", "Information"), max_length=512, required=False, help_text=_contact_help_text)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        contact_disclaimer = _('This will not be shown publicly. We will use this information to contact you and verify or request details.')
         self.helper = FormHelper()
         self.helper.layout = Layout(
             Fieldset(
@@ -53,7 +53,7 @@ class AddCommunityForm(forms.Form):
                 'styles',
             ),
             Fieldset(
-                '{} - <small>{}</small>'.format(_('Contacts'), contact_disclaimer),
+                '{} - <small>{}</small>'.format(_('Contacts'), _contact_disclaimer),
                 Row('contactOneType', 'contactOne'),
                 Row('contactTwoType', 'contactTwo'),
             ),
@@ -70,6 +70,12 @@ class UpdateCommunityForm(forms.Form):
     styles = forms.MultipleChoiceField(label=_("Dance Styles"), choices=STYLES_SORTED, widget=forms.SelectMultiple(attrs={'style': 'width: 100%'}))
     latitude = forms.FloatField(max_value=90.0, min_value=-90.0)
     longitude = forms.FloatField(max_value=80.0, min_value=-180.0)
+
+    contactOneType = forms.ChoiceField(label=_p("Contact type", "Type"), choices=CONTACT_TYPES)
+    contactOne = forms.CharField(label=_p("Contact information", "Information"), max_length=512, help_text=_contact_help_text)
+    contactTwoType = forms.ChoiceField(label=_p("Contact type", "Type"), choices=CONTACT_TYPES, required=False, initial=CONTACT_TYPES[1])
+    contactTwo = forms.CharField(label=_p("Contact information", "Information"), max_length=512, required=False, help_text=_contact_help_text)
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
@@ -82,6 +88,11 @@ class UpdateCommunityForm(forms.Form):
                 'styles',
                 'latitude',
                 'longitude',
+            ),
+            Fieldset(
+                '{} - <small>{}</small>'.format(_('Contacts'), _contact_disclaimer),
+                Row('contactOneType', 'contactOne'),
+                Row('contactTwoType', 'contactTwo'),
             ),
             ButtonHolder(
                 Submit('submit', _('Save'), css_class='btn-lg'),
