@@ -1,0 +1,27 @@
+{% extends "./base.html" %}
+{% load i18n_discoverer %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    {% translate 'Update Community' %}
+{% endblock %}
+
+{% block content %}
+    <div class='container-fluid' style='padding-top: 2em; padding-bottom: 2em;'>
+        <div class='row justify-content-md-center'>
+            <div class='col col-lg-8'>
+                <h3>{% translate 'Update Community' %}</h3>
+                <form method="post">
+                    {% crispy form %}
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function() {
+            $('#id_styles').select2({
+                closeOnSelect: false,
+            });
+        });
+    </script>
+{% endblock %}

@@ -20,14 +20,15 @@ STYLES_SORTED = tuple(STYLES_SORTED)
 STRUCTURES = [('', '')]
 STRUCTURES.extend(Community.STRUCTURES)
 
+_label_help_text = "{}: {}".format(_('Example'), _p("Community name example", "Lovely Band o' Pirates"))
+_url_help_text = "{}: {}".format(_('Example'), _p("Community URL example", "https://www.facebook.com/groups/42"))
+
 class AddCommunityForm(forms.Form):
-    label_help_text = "{}: {}".format(_('Example'), _p("Community name example", "Lovely Band o' Pirates"))
-    label = forms.CharField(label=_('Name'), max_length=512, help_text=label_help_text)
+    label = forms.CharField(label=_('Name'), max_length=512, help_text=_label_help_text)
     structure = forms.ChoiceField(label=_("Organization Type"), choices=STRUCTURES)
     latitude = forms.FloatField(max_value=90.0, min_value=-90.0, widget=forms.HiddenInput())
     longitude = forms.FloatField(max_value=80.0, min_value=-180.0, widget=forms.HiddenInput())
-    url_help_text = "{}: {}".format(_('Example'), _p("Community URL example", "https://www.facebook.com/groups/42"))
-    url = forms.URLField(label=_('Website'), max_length=512, help_text=url_help_text)
+    url = forms.URLField(label=_('Website'), max_length=512, help_text=_url_help_text)
     styles = forms.MultipleChoiceField(label=_("Dance Styles"), choices=STYLES_SORTED, widget=forms.SelectMultiple(attrs={'style': 'width: 100%'}))
 
     email_contact_example = _p("Contact information example for email address", "sofia@gmail.com")
@@ -58,6 +59,32 @@ class AddCommunityForm(forms.Form):
             ),
             ButtonHolder(
                 Submit('submit', _('Preview'), css_class='btn-lg'),
+                HTML('<a class="btn btn-secondary btn-lg" href="{}">{}</a>'.format(reverse('communities:map'), _("Cancel")))
+            ),
+        )
+
+class UpdateCommunityForm(forms.Form):
+    label = forms.CharField(label=_('Name'), max_length=512, help_text=_label_help_text)
+    structure = forms.ChoiceField(label=_("Organization Type"), choices=STRUCTURES)
+    url = forms.URLField(label=_('Website'), max_length=512, help_text=_url_help_text)
+    styles = forms.MultipleChoiceField(label=_("Dance Styles"), choices=STYLES_SORTED, widget=forms.SelectMultiple(attrs={'style': 'width: 100%'}))
+    latitude = forms.FloatField(max_value=90.0, min_value=-90.0)
+    longitude = forms.FloatField(max_value=80.0, min_value=-180.0)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Fieldset(
+                _('Details'),
+                'label',
+                'structure',
+                'url',
+                'styles',
+                'latitude',
+                'longitude',
+            ),
+            ButtonHolder(
+                Submit('submit', _('Save'), css_class='btn-lg'),
                 HTML('<a class="btn btn-secondary btn-lg" href="{}">{}</a>'.format(reverse('communities:map'), _("Cancel")))
             ),
         )

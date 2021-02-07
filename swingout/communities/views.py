@@ -13,7 +13,7 @@ from i18n_discoverer.translation import gettext as _
 from eventer.service import create as createEvent
 
 from .models import Community, Style, Contact, UpdateRequest
-from .forms import AddCommunityForm, RequestCommunityUpdateForm
+from .forms import AddCommunityForm, RequestCommunityUpdateForm, UpdateCommunityForm
 
 from .management.commands.communities_process_events import SECONDS_BETWEEN_QUERIES
 
@@ -87,6 +87,31 @@ def add(request, latitude=0.0, longitude=0.0):
 
     return render(request, 'communities/addCommunity.html', {'form': form})
 
+def update(request, uuid):
+    # TODO Allow editing contacts
+    if not request.user.has_perm('communities.change_community'):
+        return HttpResponseForbidden(_('You do not have access to update communities'))
+    community = Community.objects.get(uuid=uuid)
+    if request.method == 'POST':
+        form = UpdateCommunityForm(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+            data['uuid'] = community.uuid
+            createEvent('CommunityUpdated', data)
+            print(reverse('communities:map'))
+            return HttpResponseRedirect(reverse('communities:thankYou', args=[data['uuid']]))
+    else:
+        form = UpdateCommunityForm({
+            'label': community.label,
+            'structure': community.structure,
+            'url': community.url,
+            'latitude': community.latitude,
+            'longitude': community.longitude,
+            'styles': [style.style for style in community.style_set.all()],
+        })
+
+    return render(request, 'communities/updateCommunity.html', {'form': form})
+
 def add_preview(request):
     data = json.loads(request.session.get('addCommunityData', {}))
     if request.method == 'POST':
@@ -103,7 +128,7 @@ def add_preview(request):
     })
 
 def markUpdateRequestHandled(request, uuid):
-    request = UpdateRequest.objects.filter(uuid=uuid)[0]
+    request = UpdateRequest.objects.get(uuid=uuid)
     data = {
         'uuid': request.uuid
     }
@@ -113,7 +138,7 @@ def markUpdateRequestHandled(request, uuid):
 def delete(request, uuid):
     if not request.user.has_perm('communities.delete_community'):
         return HttpResponseForbidden(_('You do not have access to delete communities'))
-    community = Community.objects.filter(uuid=uuid)[0]
+    community = Community.objects.get(uuid=uuid)
     data = {
         'uuid': community.uuid
     }
@@ -121,7 +146,7 @@ def delete(request, uuid):
     return JsonResponse({'Success': True})
 
 def requestUpdate(request, uuid):
-    community = Community.objects.filter(uuid=uuid)[0]
+    community = Community.objects.get(uuid=uuid)
     if request.method == 'POST':
         form = RequestCommunityUpdateForm(request.POST)
         if form.is_valid() and community is not None:
