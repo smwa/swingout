@@ -1,18 +1,10 @@
 {% extends "./base.html" %}
-{% load i18n %}
 {% load i18n_discoverer %}
-{% load static %}
 
 {% block head %}
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
    crossorigin=""/>
-<meta property="og:title" content='{% translate "Swing Dance Communities Around The World" %}' />
-<meta property="og:url" content="{{ request.scheme }}://{{ request.META.HTTP_HOST }}{% url 'communities:map' %}" />
-<meta property="og:image" content="{{ request.scheme }}://{{ request.META.HTTP_HOST }}{% static 'communities/images/silhouette.png' %}" />
-<meta property="og:type" content="website" />
-<meta property="og:description" content='{% translate "See a map of swing dance communities, from Lindy Hop to St. Louis Shag." %}' />
-<meta property="og:locale" content="{% get_current_language as LANGUAGE_CODE %}{{ LANGUAGE_CODE }}" />
 {% endblock %}
 
 {% block content %}

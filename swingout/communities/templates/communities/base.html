@@ -1,3 +1,4 @@
+{% load i18n %}
 {% load i18n_discoverer %}
 {% load static %}
 <!doctype html>
@@ -6,10 +7,17 @@
 <head>
   <meta charset="utf-8">
 
-  <title>Swingout.Dance - {% block title %}{% translate "Discover Dance Communities" %}{% endblock %}</title>
-  <meta name="description" content="{% translate 'Enables discovering dance communities around the world' %}">
+  <title>Swingout.Dance - {% block title %}{% translate "Swing Dance Communities Around The World" %}{% endblock %}</title>
+  <meta name="description" content="{% translate 'See a map of swing dance communities, from Lindy Hop to St. Louis Shag.' %}">
   <meta name="author" content='Michael Smith<"michael.smith.ok@gmail.com">'>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta property="og:site_name" content="Swingout.Dance" />
+  <meta property="og:title" content='{% translate "Swing Dance Communities Around The World" %}' />
+  <meta property="og:url" content="{{ request.scheme }}://{{ request.META.HTTP_HOST }}{% url 'communities:map' %}" />
+  <meta property="og:image" content="{{ request.scheme }}://{{ request.META.HTTP_HOST }}{% static 'communities/images/silhouette.png' %}" />
+  <meta property="og:type" content="website" />
+  <meta property="og:description" content='{% translate "See a map of swing dance communities, from Lindy Hop to St. Louis Shag." %}' />
+  <meta property="og:locale" content="{% get_current_language as LANGUAGE_CODE %}{{ LANGUAGE_CODE }}" />
   <link rel="shortcut icon" type="image/png" href="{% static 'communities/images/icon_small.png' %}" />
   <link rel="manifest" href="{% url 'communities:manifest' %}">
   <link rel="stylesheet"
