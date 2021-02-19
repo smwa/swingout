@@ -58,26 +58,6 @@
             noWrap: true,
         }).addTo(map);
 
-        // Show welcome modal
-        const visitedCookieName = 'visited0'; // Bump this number for welcomeModal changes
-        if (document.cookie.indexOf(`${visitedCookieName}=true`) == -1) {
-            const thirtydays = 1000*60*60*24*30;
-            const expires = new Date((new Date()).valueOf() +  thirtydays);
-            document.cookie = `${visitedCookieName}=true;expires=` +  expires.toUTCString();
-            $('#welcomeModal').modal();
-        }
-
-        // On welcome modal close
-        $('#welcomeModal').on('hidden.bs.modal', () => {
-            findMe();
-        });
-
-        const htmlEncode = (string) => {
-            return string.replace(/[\u00A0-\u9999<>\&]/g, function(i) {
-                return '&#'+i.charCodeAt(0)+';';
-            });
-        }
-
         let communities = [];
 
         fetch("{% url 'communities:index' %}")
@@ -163,5 +143,23 @@
         }
 
         map.on('click', onMapClick);
+
+        window.addEventListener('DOMContentLoaded', function() {
+            (function($) {
+                // Show welcome modal
+                const visitedCookieName = 'visited0'; // Bump this number for welcomeModal changes
+                if (document.cookie.indexOf(`${visitedCookieName}=true`) == -1) {
+                    const thirtydays = 1000*60*60*24*30;
+                    const expires = new Date((new Date()).valueOf() +  thirtydays);
+                    document.cookie = `${visitedCookieName}=true;expires=` +  expires.toUTCString();
+                    $('#welcomeModal').modal();
+                }
+
+                // On welcome modal close
+                // $('#welcomeModal').on('hidden.bs.modal', () => {
+                    // findMe(); // TODO Re-enable after there's sufficient data
+                // });
+            })(jQuery);
+        });
     </script>
 {% endblock %}

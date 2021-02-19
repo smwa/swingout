@@ -3,7 +3,7 @@
   "short_name": "Swingout",
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#0FB",
+  "theme_color": "#00FFBB",
   "background_color": "#222",
   "description": "Discover dance communities around the world",
   "icons": [
