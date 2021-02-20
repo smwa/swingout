@@ -41,6 +41,7 @@ class Style(models.Model):
     LINDY_HOP = 'Lindy Hop'
     SAINT_LOUIS_SHAG = 'St. Louis Shag'
     WEST_COAST_SWING = 'West Coast Swing'
+    ZOUK = 'Zouk'
 
     __STYLES_LIST = [
         BALBOA,
@@ -55,6 +56,7 @@ class Style(models.Model):
         LINDY_HOP,
         SAINT_LOUIS_SHAG,
         WEST_COAST_SWING,
+        ZOUK,
     ]
 
     STYLES = tuple([(style, _(style)) for style in __STYLES_LIST])

@@ -16,7 +16,7 @@ class UpdateRequestAdmin(admin.ModelAdmin):
     show_delete_url.short_description = "Delete URL"
 
 class CommunityAdmin(admin.ModelAdmin):
-    readonly_fields = ('show_update_url', 'show_delete_url',)
+    readonly_fields = ('show_update_url', 'show_delete_url', 'show_url',)
     def show_delete_url(self, obj):
         if not obj.uuid:
             return ''
@@ -25,9 +25,14 @@ class CommunityAdmin(admin.ModelAdmin):
         if not obj.uuid:
             return ''
         return format_html("<a target='_blank' href='{url}'>{uuid}</a>", url=reverse('communities:update', args=[obj.uuid]), uuid=obj.uuid)
+    def show_url(self, obj):
+        if not obj.url:
+            return ''
+        return format_html("<a target='_blank' href='{url}'>{url}</a>", url=obj.url)
 
     show_delete_url.short_description = "Delete URL"
     show_update_url.short_description = "Update URL"
+    show_url.short_description = "Open Community URL"
 
 admin.site.register(Community, CommunityAdmin)
 admin.site.register(Style)
