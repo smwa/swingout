@@ -3,6 +3,7 @@
 
 {% block head %}
     <meta http-equiv="refresh" content="{{ timeOut }};url={% url 'communities:map' %}#{{ uuid }}" />
+    <meta name="robots" content="noindex">
 {% endblock %}
 
 {% block content %}
